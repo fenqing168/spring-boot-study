@@ -101,3 +101,42 @@ public class HelloWorldController {
     </build>
 ```
 > * 将这个应用打成可执行jar包
+
+## 5、Hello World探究
+### 1、POM文件
+#### 1.父项目
+```xml
+    <!-- 继承springboot父工程 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.9.RELEASE</version>
+    </parent>
+```
+> * 以及他的上一级父项目
+
+```xml
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-dependencies</artifactId>
+    <version>2.0.9.RELEASE</version>
+    <relativePath>../spring-boot-dependencies</relativePath>
+  </parent>
+```
+> * 它充当全部可能用到的jar包依赖
+> * 可以称为Spring Boot的版本仲裁
+> * 大部分依赖可以不需要写版本号（没有在dependencies工程里面的依赖，还需手动声明版本号）
+
+#### 2、导入的依赖
+```xml
+    <!-- 添加web启动器依赖 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+```
+> * spring-boot-starter:spring-boot场景启动器; 帮我们导入了web模块正常运行所依赖的组件；
+> * Spring Boot 将所有的功能场景抽取出来，做成一个个starters（启动器）,只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来，要用什么功能就导入什么场景的启动器
+
