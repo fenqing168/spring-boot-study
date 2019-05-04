@@ -1,4 +1,4 @@
-# Spring Boot 入门
+# 一、Spring Boot 入门
 ## 1、Spring Boot简介
 > * 简化Spring应用开发的一个框架;<br>
 > * 整个Spring技术栈的一大整合; <br/>
@@ -140,3 +140,89 @@ public class HelloWorldController {
 > * spring-boot-starter:spring-boot场景启动器; 帮我们导入了web模块正常运行所依赖的组件；
 > * Spring Boot 将所有的功能场景抽取出来，做成一个个starters（启动器）,只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来，要用什么功能就导入什么场景的启动器
 
+### 2、Spring Boot主程序类，入口类
+```java
+/**
+ * @SpringBootApplication Spring Boot 标识注解，表明这个类是Spring Boot 主程序类
+ */
+@SpringBootApplication
+public class HelloWorldMainApplication {
+
+
+    public static void main(String[] args) {
+        // 执行Spring boot应用
+        SpringApplication.run(HelloWorldMainApplication.class, args);
+    }
+
+}
+```
+> * @**SpringBootApplication**: Spring Boot引用标注正在某个类上说明这个类是SpringBoot的主配置类， SpringBoot就应该运行这个类的main你方法来启动SpringBoot应用
+```java
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(
+    excludeFilters = {@Filter(
+    type = FilterType.CUSTOM,
+    classes = {TypeExcludeFilter.class}
+), @Filter(
+    type = FilterType.CUSTOM,
+    classes = {AutoConfigurationExcludeFilter.class}
+)}
+)
+public @interface SpringBootApplication{}
+```
+> * @**SpringBootApplication**:Spring Boot的配置类；
+>> * 标注在某个类上，表示这个是一个Spring Boot的配置类
+>> * @**Configuration**:配置类上标注这个注解：
+>>> * 配置类 ---> 配置文件；配置类也是容器中的组件@Component
+> * @**EnableAutoConfiguration** Spring Boot 自动开启配置注解
+>> * 以前我们需要配置的东西，Spring Boot帮我们自动配置； @**EnableAutoConfiguration**告诉我吗SpringBoot将开启自动配置功能；这样自动配置才能生效
+```java
+@AutoConfigurationPackage
+@Import({AutoConfigurationImportSelector.class})
+public @interface EnableAutoConfiguration {}
+```
+>> * @**AutoConfigurationPackage** 自动配置包
+>>
+>> * @Import({Registrar.class});
+>>
+>> * Spring的底层注解，@Import,给容器中导入一个组件；导入一个组件由Registrar.class
+>>
+>> * 将主配置陪（@SpringBootApplication ）的所在包下面的所有自雷所有组件扫描到Spring容器中
+>>
+>>   > ```java
+>>   > @Import({AutoConfigurationImportSelector.class}) 
+>>   > ```
+
+> > >  给容器中导入组件？
+> > >
+> > > ```java
+> > > AutoConfigurationImportSelector
+> > > ```
+
+> > > 导入哪些组件选择器；
+> > >
+> > > 将所需要导入的组件以全类名的方式返回，这些组件就会添加到容器中；
+> > >
+> > > 会给容器中导入非常多的自动配置类的（XXXConfiguration）；就是给容器中导入这个场景需要的所有组件，并配置好这些组件；
+> > >
+> > > 有了自动配置类，免去了手动编写配置注入功能组件的工作
+> > > SpringFactoriesLoader.loadFactoryNames（EnableAutoConfiguration.class， classLoader）
+> > >
+> > > Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些指定的值的自动配置类导入到容器中，自动配置了生效，帮我妈进行自动配置工作；以前我们需要自己配置的东西，自动配置类会将我们自动配置
+> > >
+> > > J2EE的整体整合方案都在spring-boot-autoconfigure-2.0.9.RELEASE.jar下
+
+## 6、是用Spring Initializer快速创建Spring Boot项目
+
+### 1.IDE都支持使用Spring的项目创建向导快速创建一个Spring Boot项目；
+
+> 选择我们需要的模块，向导会帮我从互联网创建Spring Boot项目
+>
+> 默认生成的Spring Boot项目
+>
+> * 主程序已经生成好了，我们只要写我们的业务逻辑
+> * resources文件夹的目录结构
+> * static: 保存所有的静态资源；js css images
+> * templates: 保存所有的模板页面；（Spring Boot 默认jar包使用嵌入式的tomcat，默然不支持jsp页面）；可以使用模板引擎（freemarker， thymeleaf）
+> * application.properties:Spring Boot应用的配置文件；可以修改一些默认设置 
