@@ -2,6 +2,7 @@ package cn.fenqing168.springBoot.bean;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -15,8 +16,9 @@ import java.util.Map;
  * @ConfigurationProperties: 告诉SpringBoot将本类中所有属性和配置文件中相关配置进行绑定；
  * prefix = "person"：配置问文件中哪个下面的所有属性进行一一对应
  *
- * 只有这个组件是容器中的组件，才能容器提供的@ConfigurationProperties
+ * 只有这个组件是容器中的组件，才能容器提供的@ConfigurationProperties 默认从全局配置文件中获取值
  */
+@PropertySource("classpath:person.properties")
 @Component
 @ConfigurationProperties(prefix = "person")
 @Validated

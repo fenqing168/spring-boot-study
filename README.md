@@ -514,5 +514,102 @@ public @interface EnableAutoConfiguration {}
 >     private Dog dog;
 > }
 > ```
+
+#### 4、@propertySource&@ImportResource
+
+> @PropertySource:加载指定的配置文件
 >
-> 
+> > ```java
+> > @PropertySource("classpath:person.properties")
+> > @Component
+> > @ConfigurationProperties(prefix = "person")
+> > @Validated
+> > public class Person {
+> > 
+> >     /**
+> >      * <bean class="Person">
+> >      *     <property name="lastName" value="字面量/${key}从环境变量，配置文件中获取值/#{SpEL}"></property>
+> >      * </bean>
+> >      */
+> >     //@Value("${person.last-name}")
+> >     /**
+> >      * lastName必须是邮箱
+> >      */
+> >     //@Email
+> >     private String lastName;
+> > 
+> >     //@Value("#{11*2}")
+> >     private Integer age;
+> > 
+> >     //@Value("true")
+> >     private Boolean boss;
+> > 
+> >     private Date birth;
+> > 
+> >     private Map<String, Object> maps;
+> >     private List<Object> lists;
+> >     private Dog dog;
+> > }
+> > ```
+> >
+> > 
+>
+> @ImportResource：导入Spring的配置文件，让配置文件里面的内容生效
+>
+> * Spring Boot 里面没有Spring的配置文件，我们自己编写的配置文件，也不能自动识别；
+>
+> * 想让我们SpringBoot识别Spring配置文件，需要在某个配置类上编写@ImportResource注解
+>
+> * ```java
+>   @ImportResource(locations = {"classpath:beans.xml"})
+>   @SpringBootApplication
+>   public class SpringBoot02ConfigApplication {
+>   
+>       public static void main(String[] args) {
+>           SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+>       }
+>   
+>   }
+>   ```
+>
+>   Spring Boot推荐给容器添加组件的方式；
+>
+>   不来使用配置文件方式
+>
+>   ```xml
+>   <?xml version="1.0" encoding="UTF-8"?>
+>   <beans xmlns="http://www.springframework.org/schema/beans"
+>          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+>   
+>       <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
+>   
+>   </beans>
+>   ```
+>
+>   1.配置类========Spring配置文件
+>
+>   2.使用@Bean给容器中添加组件
+>
+>   ```java
+>   /**
+>    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
+>    */
+>   @Configuration
+>   public class MyAppConfig {
+>   
+>       /**
+>        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
+>        * @return
+>        */
+>       @Bean
+>       public HelloService helloService(){
+>           System.out.println("给容器中添加组件");
+>           return new HelloService();
+>       }
+>   
+>   }
+>   ```
+>
+>   
+
