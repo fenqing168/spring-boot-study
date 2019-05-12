@@ -335,7 +335,7 @@ public @interface EnableAutoConfiguration {}
 > > pets:[cat, dog, pig]
 > > ```
 
-### 3、获取配置文件注入
+## 3、获取配置文件注入
 
 > 配置文件：
 >
@@ -462,11 +462,11 @@ public @interface EnableAutoConfiguration {}
 > </dependency>
 > ```
 
-### # 1、proeprties配置文件在idea中默认是utf-8编码，中文可能会乱码
+### 1、proeprties配置文件在idea中默认是utf-8编码，中文可能会乱码
 
 > ![1557669909541](./rd-image/1557669909541.png) 
 
-#### 2、@Value获取值和@ConfigurationProperties获取值比较
+### 2、@Value获取值和@ConfigurationProperties获取值比较
 
 > |                      | @ConfigurationProperties | @Value     |
 > | -------------------- | ------------------------ | ---------- |
@@ -481,7 +481,7 @@ public @interface EnableAutoConfiguration {}
 > * 如果我们只是在某个业务逻辑中需要获取一下配置文件中的某想值，就用@Value
 > * 如果我们专门编写了一个javabean来和配置文件进行映射；则直接使用@ConfigurationProperties；
 
-#### 3、数据注入值校验
+### 3、数据注入值校验
 
 > ```java
 > @Component
@@ -515,7 +515,7 @@ public @interface EnableAutoConfiguration {}
 > }
 > ```
 
-#### 4、@propertySource&@ImportResource
+### 4、@propertySource&@ImportResource
 
 > @PropertySource:加载指定的配置文件
 >
@@ -610,6 +610,6 @@ public @interface EnableAutoConfiguration {}
 >   
 >   }
 >   ```
->
->   
+
+## 4、配置文件占位符
 
