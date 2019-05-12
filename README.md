@@ -452,3 +452,67 @@ public @interface EnableAutoConfiguration {}
 > ```
 >
 > 我们可以导入一个配置文件处理器，以后编写就有提示
+>
+> ```xml
+> <!--导入配置文件处理器，配置文件进行绑定就会有提示-->
+> <dependency>
+>     <groupId>org.springframework.boot</groupId>
+>     <artifactId>spring-boot-configuration-processor</artifactId>
+>     <optional>true</optional>
+> </dependency>
+> ```
+
+### # 1、proeprties配置文件在idea中默认是utf-8编码，中文可能会乱码
+
+> ![1557669909541](./rd-image/1557669909541.png) 
+
+#### 2、@Value获取值和@ConfigurationProperties获取值比较
+
+> |                      | @ConfigurationProperties | @Value     |
+> | -------------------- | ------------------------ | ---------- |
+> | 功能                 | 批量注入配置文件的属性   | 一个个指定 |
+> | 松散绑定（松散语法） | 支持                     | 不支持     |
+> | SpEL（表达式）       | 不支持                   | 支持       |
+> | JSR303数据校验       | 支持                     | 不支持     |
+> | 复杂类型封装         | 支持                     | 不支持     |
+>
+> 配置文件yml还是properties他们都能回去到值；
+>
+> * 如果我们只是在某个业务逻辑中需要获取一下配置文件中的某想值，就用@Value
+> * 如果我们专门编写了一个javabean来和配置文件进行映射；则直接使用@ConfigurationProperties；
+
+#### 3、数据注入值校验
+
+> ```java
+> @Component
+> @ConfigurationProperties(prefix = "person")
+> @Validated
+> public class Person {
+> 
+>     /**
+>      * <bean class="Person">
+>      *     <property name="lastName" value="字面量/${key}从环境变量，配置文件中获取值/#{SpEL}"></property>
+>      * </bean>
+>      */
+>     //@Value("${person.last-name}")
+>     /**
+>      * lastName必须是邮箱
+>      */
+>     @Email
+>     private String lastName;
+> 
+>     //@Value("#{11*2}")
+>     private Integer age;
+> 
+>     //@Value("true")
+>     private Boolean boss;
+> 
+>     private Date birth;
+> 
+>     private Map<String, Object> maps;
+>     private List<Object> lists;
+>     private Dog dog;
+> }
+> ```
+>
+> 
