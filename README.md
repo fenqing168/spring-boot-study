@@ -561,55 +561,139 @@ public @interface EnableAutoConfiguration {}
 > * 想让我们SpringBoot识别Spring配置文件，需要在某个配置类上编写@ImportResource注解
 >
 > * ```java
->   @ImportResource(locations = {"classpath:beans.xml"})
->   @SpringBootApplication
->   public class SpringBoot02ConfigApplication {
->   
->       public static void main(String[] args) {
->           SpringApplication.run(SpringBoot02ConfigApplication.class, args);
->       }
->   
->   }
+> @ImportResource(locations = {"classpath:beans.xml"})
+> @SpringBootApplication
+> public class SpringBoot02ConfigApplication {
+>
+>    public static void main(String[] args) {
+>        SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+>    }
 >   ```
 >
->   Spring Boot推荐给容器添加组件的方式；
+> }
+> ```
+> 
+> Spring Boot推荐给容器添加组件的方式；
+> 
+> 不来使用配置文件方式
+> 
+> ​```xml
+> <?xml version="1.0" encoding="UTF-8"?>
+> <beans xmlns="http://www.springframework.org/schema/beans"
+>       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+> 
+>    <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
+> 
+> </beans>
+> ```
 >
->   不来使用配置文件方式
+> 1.配置类========Spring配置文件
 >
->   ```xml
->   <?xml version="1.0" encoding="UTF-8"?>
->   <beans xmlns="http://www.springframework.org/schema/beans"
->          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
->          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
->   
->       <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
->   
->   </beans>
->   ```
+> 2.使用@Bean给容器中添加组件
 >
->   1.配置类========Spring配置文件
->
->   2.使用@Bean给容器中添加组件
->
->   ```java
->   /**
+> ```java
+> /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
->    */
->   @Configuration
->   public class MyAppConfig {
->   
->       /**
+> */
+> @Configuration
+> public class MyAppConfig {
+> 
+>    /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
->        */
->       @Bean
->       public HelloService helloService(){
->           System.out.println("给容器中添加组件");
->           return new HelloService();
->       }
->   
->   }
->   ```
+>     */
+>    @Bean
+>    public HelloService helloService(){
+>        System.out.println("给容器中添加组件");
+>        return new HelloService();
+>    }
+> 
+> }
+> ```
 
 ## 4、配置文件占位符
 
+### 1、随机数
+
+> ```properties
+> person.last-name=张三${random.uuid}
+> person.age=${random.int}
+> ```
+
+### 2、站位父获取之前哦诶之的值，如果没有使用：指定默认值
+
+> ```properties
+> person.last-name=张三${random.uuid}
+> person.age=${random.int}
+> person.birth=2018/1/1
+> person.boss=false
+> person.lists=a,b,c
+> person.maps.k1=v1
+> person.maps.k2=v2
+> person.dog.name=${person.hello:hello}dog
+> person.dog.age=1
+> ```
+
+## 5、Profile
+
+### 1、多Profile文件
+
+> 我们在住配置文件编写的时候，文件名可以是application-{profile}.properties/yml
+>
+> 默认使用applicat.properties/yml
+
+### 2、yml支持多文档快方式
+
+> ```yaml
+> server:
+>   port: 8081
+> 
+> #person:
+> #  lastName: zhangsan
+> #  age: 18
+> #  boss: false
+> #  birth: 2017/12/12
+> #  maps: {k1: v1, k2: v2}
+> #  lists:
+> #    - lisi
+> #    - zhaoliu
+> #  dog:
+> #    name: 小狗
+> #    age: 2
+> spring:
+>   profiles:
+>     active: prod
+> 
+> ---
+> server:
+>   port: 8083
+> spring:
+>   profiles: dev
+> 
+> 
+> ---
+> server:
+>   port: 8084
+> 
+> spring:
+>    profiles: prod
+> ```
+>
+> 
+
+### 3、激活指定的profile
+
+> 1、在配置文件中指定spring.profiles.active=dev
+
+> 2、命令行方式：
+>
+> > --spring.profiles.active=dev（给main方法传递参数）
+>
+> > 也可以打成jar包，传递参数
+> >
+> > ```cmd
+> > Java -jar spring-boot-02-config-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+> > ```
+>
+> 3、虚拟机参数
