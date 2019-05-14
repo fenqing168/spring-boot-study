@@ -723,4 +723,23 @@ public @interface EnableAutoConfiguration {}
 
 > 我们还可以通过修改spring.config.location来修改默认的配置文件位置
 
-> 项目大搞后，可以使用命令行参数的形式，启动项目的时候来指定配置文件的新位置；配置文件和默认配置文件共同作用互补配置
+> 项目大搞后，可以使用命令行参数的形式，启动项目的时候来指定配置文件的新位置；配置文件和默认配置文件共同作用互补配置（用作运维）
+
+## 7、外部配置加载顺序
+
+> SpringBoot也可以从以下位置加载配置；优先级从高到低；高优先级配置会覆盖优先级低的配置，不同的配置会互补
+
+* 1.命令行参数
+
+> java -jar spring-boot-02-config02-0.0.1-SNAPSHOT.jar --server.port=8888 多个参数用空格分来，参数前加--
+
+* 2.来之java：comp/env的JNDI属性
+* 3.Java系统属性（System.getProperties()）
+* 4.操作系统环境变量
+* 5.RandomValuePropertySource配置的random.*属性值
+* 6.jar包外部的application-{profile}.properties或者application.yml(带spring.profile)配置文件
+* 7.jar包内部的application-{profile}.properties或application.yml（带spring.profile）配置文件
+* 8.jar外部的application-(profile).properties或者application.yml(不带spring.profile)配置文件
+* 9.jar包内部的application-{profile}.properties或application.xml(不带spring.profile)配置文件
+* 10.@Configuration注解上的@PropertySource
+* 11.通过SpringApplication.setDefaultProperties指定的默认属性
