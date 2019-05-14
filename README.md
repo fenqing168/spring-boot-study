@@ -561,53 +561,54 @@ public @interface EnableAutoConfiguration {}
 > * 想让我们SpringBoot识别Spring配置文件，需要在某个配置类上编写@ImportResource注解
 >
 > * ```java
-> @ImportResource(locations = {"classpath:beans.xml"})
-> @SpringBootApplication
-> public class SpringBoot02ConfigApplication {
->
->    public static void main(String[] args) {
->        SpringApplication.run(SpringBoot02ConfigApplication.class, args);
->    }
+>   @ImportResource(locations = {"classpath:beans.xml"})
+>   @SpringBootApplication
+>   public class SpringBoot02ConfigApplication {
 >   ```
 >
+> public static void main(String[] args) {
+>     SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
 > 
-> Spring Boot推荐给容器添加组件的方式；
-> 
-> 不来使用配置文件方式
-> 
-> ​```xml
-> <?xml version="1.0" encoding="UTF-8"?>
-> <beans xmlns="http://www.springframework.org/schema/beans"
->       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
->       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-> 
->    <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
-> 
-> </beans>
+> }
 > ```
 >
+> Spring Boot推荐给容器添加组件的方式；
+>
+> 不来使用配置文件方式
+>
+> ```xml
+> <?xml version="1.0" encoding="UTF-8"?>
+> <beans xmlns="http://www.springframework.org/schema/beans"
+>    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+>
+> <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
+>
+> </beans>
+> ```
+> 
 > 1.配置类========Spring配置文件
->
+> 
 > 2.使用@Bean给容器中添加组件
->
-> ```java
+> 
+> ​```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
 > 
->    /**
+> /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
->     */
->    @Bean
->    public HelloService helloService(){
->        System.out.println("给容器中添加组件");
->        return new HelloService();
->    }
+>  */
+> @Bean
+> public HelloService helloService(){
+>     System.out.println("给容器中添加组件");
+>     return new HelloService();
+> }
 > 
 > }
 > ```
@@ -697,3 +698,29 @@ public @interface EnableAutoConfiguration {}
 > > ```
 >
 > 3、虚拟机参数
+>
+> ```cmd
+> -Dspring.profiles.active=dev
+> ```
+
+## 6、配置文件加载位置
+
+> spring boot 启动会扫描一下位置的application.properties或者application.yml文件作为Spring boot的默认配置文件
+>
+> -file:../config/
+>
+> -file../
+>
+> -classpath:/config/
+>
+> -classpath:/
+>
+> 优先级由高到低，高优先级的配置会覆盖低优先级的配置；
+>
+> SpringBoot会从这四个位置全部加载主配置文件；**互补配置**
+
+
+
+> 我们还可以通过修改spring.config.location来修改默认的配置文件位置
+
+> 项目大搞后，可以使用命令行参数的形式，启动项目的时候来指定配置文件的新位置；配置文件和默认配置文件共同作用互补配置
