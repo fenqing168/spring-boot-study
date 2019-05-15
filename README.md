@@ -1061,3 +1061,22 @@ Negative matches:
 Spring Boot 底层使用Spring框架，Spring框架默认是JCL;
 
 SpringBoot选用的是SLF4j和Logback
+
+## 2、SLF4j使用
+
+### 1、如何在系统中使用SLF4j
+
+* 在开发的时候，日志记录方法的调用，不应该来直接调用日志的实现类，而知调用日志抽象层里面的方法
+
+* 应该给系统导入SLF4j的jar和logback的实现jar
+
+* ```java
+  public class HelloWorld {
+    public static void main(String[] args) {
+      Logger logger = LoggerFactory.getLogger(HelloWorld.class);
+      logger.info("Hello World");
+    }
+  }
+  ```
+
+* 
