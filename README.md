@@ -565,52 +565,56 @@ public @interface EnableAutoConfiguration {}
 >   @SpringBootApplication
 >   public class SpringBoot02ConfigApplication {
 >   ```
->
+> ```
+> 
 > public static void main(String[] args) {
->     SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+>  SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+> }
+> ```
+>
 > }
 > ```
 > 
-> }
-> ```
->
 > Spring Boot推荐给容器添加组件的方式；
->
+> 
 > 不来使用配置文件方式
->
-> ```xml
+> 
+> ​```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
->    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
->    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
->
+> xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+> xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+> 
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
->
+> 
 > </beans>
 > ```
-> 
+>
 > 1.配置类========Spring配置文件
-> 
+>
 > 2.使用@Bean给容器中添加组件
-> 
-> ​```java
+>
+> ```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
-> 
+>
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
->  */
+> */
 > @Bean
 > public HelloService helloService(){
->     System.out.println("给容器中添加组件");
->     return new HelloService();
+>  System.out.println("给容器中添加组件");
+>  return new HelloService();
 > }
+>
+> }
+>
+> ```
 > 
-> }
 > ```
 
 ## 4、配置文件占位符
@@ -747,6 +751,8 @@ public @interface EnableAutoConfiguration {}
 > * 所有支持配置加载来源 [请查看官方文档](<https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/#boot-features-external-config>)
 
 ## 8、自动配置原理
+
+### 1、自动配置原理
 
 * 配置文件到底能写什么？怎么写？自动配置原理
 
@@ -959,3 +965,32 @@ public @interface EnableAutoConfiguration {}
       * 给容器中自动配置类添加组件的时候，会从properties类中获取某些属性，我们就可以在配置文件中指定这些属性的值
       * xxxxAutoConfigurartion自动配置类
       * 给容器中添加组件，properties会从配置文件中读取配置信息
+
+
+
+### 2、细节
+
+#### 1、@Conditional派生注解（Spring注解版原生的@Conditional作用）
+
+* 作用：必须是@Conditional指派的条件成立，才给容器中添加组件，配置裴黎明的所有内容才生效
+
+| @Conditional                    | 作用（判断是否满足当前条件）                     |
+| ------------------------------- | ------------------------------------------------ |
+| @ConditionalOnJava              | 系统的java版本是否符合要求                       |
+| @ConditionalOnBean              | 容器中存在指定Bean                               |
+| @ConditionalOnMissingBean       | 容器中不存在指定Bean                             |
+| @ConditionalOnExpression        | 满足SpEL表达式指定                               |
+| @ConditionalOnClass             | 系统中有指定的类                                 |
+| @ConditionalMissingClass        | 系统中没有指定的类                               |
+| @ConditionalOnSingleCandidate   | 容器中只有一个指定的Bean，或者这个Bean是首选Bean |
+| @ConditionalOnProperty          | 系统中指定的属性是否有指定的值                   |
+| @ConditionalOnResoures          | 类路径下是否存在指定的资源文件                   |
+| @ConditionalOnWebApplication    | 当前是web环境                                    |
+| @ConditionalOnNotWebApplication | 当前不是web环境                                  |
+| @ConditionalOnJndi              | JNDI存在指定项                                   |
+
+自动配置类必须在一定的条件下才能生效
+
+我们怎么知道配置类生效；
+
+我们可以通过启动 debug=true属性； 来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；
