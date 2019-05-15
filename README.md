@@ -1094,3 +1094,50 @@ SpringBoot选用的是SLF4j和Logback
 * * 将系统中其他日志框架先排除出去
   * 用中间包来替换原来的日志框架
   * 我们导入slf4j其他的实现
+
+### 3、SpringBoot日志管理
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+    <version>2.1.5.RELEASE</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+* SpringBoot日志启动器
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-logging</artifactId>
+    <version>2.1.5.RELEASE</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+* ![](./rd-image/20190516010204.png)
+
+* 总结
+
+* * SpingBoot底层也是使用slf4j+logback的方式进行日志记录
+
+  * SpringBoot也把其他的日志都替换成了slf4j;
+
+  * 中间替换包？
+
+  * ```java
+    @SuppressWarnings("rawtypes")
+    public abstract class LogFactory {
+    
+        static String UNSUPPORTED_OPERATION_IN_JCL_OVER_SLF4J = "http://www.slf4j.org/codes.html#unsupported_operation_in_jcl_over_slf4j";
+    
+        static LogFactory logFactory = new SLF4JLogFactory();
+    ```
+
+  * ![](./rd-image/20190516010832.png)
+
+  * 如果我们要引入其他框架？一定要把这个框架的默认日志依赖移除掉？
+
+  * Spring 框架默认使用commons-logging
