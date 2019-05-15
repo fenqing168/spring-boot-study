@@ -994,3 +994,70 @@ public @interface EnableAutoConfiguration {}
 我们怎么知道配置类生效；
 
 我们可以通过启动 debug=true属性； 来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；
+
+```java
+=========================
+AUTO-CONFIGURATION REPORT
+=========================
+
+
+Positive matches:(自动配置类启动的	)
+-----------------
+
+   DispatcherServletAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.web.servlet.DispatcherServlet'; @ConditionalOnMissingClass did not find unwanted class (OnClassCondition)
+      - @ConditionalOnWebApplication (required) found 'session' scope (OnWebApplicationCondition)
+Negative matches:
+-----------------
+
+   ActiveMQAutoConfiguration:（没有启动和没有	启动成功的）
+      Did not match:
+         - @ConditionalOnClass did not find required classes 'javax.jms.ConnectionFactory', 'org.apache.activemq.ActiveMQConnectionFactory' (OnClassCondition)
+
+   AopAutoConfiguration:
+      Did not match:
+         - @ConditionalOnClass did not find required classes 'org.aspectj.lang.annotation.Aspect', 'org.aspectj.lang.reflect.Advice' (OnClassCondition)
+
+   ArtemisAutoConfiguration:
+      Did not match:
+         - @ConditionalOnClass did not find required classes 'javax.jms.ConnectionFactory', 'org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory' (OnClassCondition)
+```
+
+# 三、日志
+
+## 1、日志框架
+
+* 小张；开发一个大型系统；
+
+* 1.System.out.println("");将关键的数据打印在控制台；去掉？写在一个文件？
+
+* 框架来记录系统的一些运行时信息；日志框架；zhanglogging.jar;
+
+* 高大上的功能?异步模式？自动归档？xxx？zhanglogging-good.jar?
+
+* 将以前的框架卸下来？换上新的框架，重新修改之前相关的API；zhanglogging-prefect.jar
+
+* JDBC----数据库驱动
+
+* * 写了一个统一的接口层，日志门面（日志的一个抽象层）；logging-abstract.jar
+  * 给项目中导入具体的日志实现就行了；我们的之前的日志框架都是实现的抽象层
+
+* 市面上的日志框架
+
+* JUL,JCL,Jboss-logging,logback，log4j,log4j2,slf4j...
+
+* | 日志门面(日志的抽象层)                                       | 日志实现                                    |
+  | ------------------------------------------------------------ | ------------------------------------------- |
+  | ~~JCL(Jakarta Commons Logging)~~ SLF4J(Simple Logging Facade for Java) ~~jboss-logging~~ | Log4j JUl(java.util.logging) Log4j2 Logback |
+
+* 左边选一个门面（抽象层），右边选一个实现；
+
+日志门面 ： SLF4j;
+
+日志实现：Logback
+
+
+
+Spring Boot 底层使用Spring框架，Spring框架默认是JCL;
+
+SpringBoot选用的是SLF4j和Logback
