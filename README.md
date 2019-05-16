@@ -567,51 +567,55 @@ public @interface EnableAutoConfiguration {}
 >   ```
 > ```
 > 
+> ```
+>
 > public static void main(String[] args) {
->  SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+> SpringApplication.run(SpringBoot02ConfigApplication.class, args);
+> }
+> ```
+> 
 > }
 > ```
 >
-> }
-> ```
-> 
 > Spring Boot推荐给容器添加组件的方式；
-> 
+>
 > 不来使用配置文件方式
-> 
-> ​```xml
+>
+> ```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-> 
+>
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
-> 
+>
 > </beans>
 > ```
->
+> 
 > 1.配置类========Spring配置文件
->
+> 
 > 2.使用@Bean给容器中添加组件
->
-> ```java
+> 
+> ​```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
->
+> 
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
 > */
 > @Bean
 > public HelloService helloService(){
->  System.out.println("给容器中添加组件");
->  return new HelloService();
+> System.out.println("给容器中添加组件");
+> return new HelloService();
 > }
->
+> 
 > }
+> 
+> ```
 >
 > ```
 > 
@@ -1141,3 +1145,58 @@ SpringBoot选用的是SLF4j和Logback
   * 如果我们要引入其他框架？一定要把这个框架的默认日志依赖移除掉？
 
   * Spring 框架默认使用commons-logging
+
+  * ```xml
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    ```
+
+  * SpringBoot能自动适配所有的日志，而且底层使用slf4j+logback的方式记录日志，引入其他框架的时候，只需要把这个框架爱依赖的日志框架排除掉
+
+## 四、日志使用
+
+### 1、默认配置
+
+* SpringBoot默认帮我们配置好了日志；
+
+* ```java
+  Logger logger = LoggerFactory.getLogger(getClass());
+  
+      @Test
+      public void contextLoads() {
+  
+          //由低到高 trace< debug< info < warn < error
+          //可以调节输出的日志级别；日志就会在这个级别以后的高级别生效
+          logger.trace("这是tracer日志...");
+          logger.debug("这是debug日志...");
+          //springBoot默认调节的是info级别的,没有指定别的就用SpringBoot默认规定的级别：root级别
+          logger.info("这是info日志...");
+          logger.warn("这是warn日志...");
+          logger.error("这是error日志...");
+  
+      }
+  ```
+
+* ```xml
+  <!--
+  	日志输出格式:
+  		%d表示日期时间
+  		@thread表示线程名
+  		%-5level：级别从左显示5个字符宽度
+  		%logger{50}： 表示logger名字最长50个字符，否则按照句点分割。
+  		%msg: 日志消息
+  		%n是换行符
+  -->
+  %d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{50} - %msg%n
+  ```
+
+* 
+
