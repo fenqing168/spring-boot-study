@@ -1198,5 +1198,73 @@ SpringBoot选用的是SLF4j和Logback
   %d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{50} - %msg%n
   ```
 
-* 
+* spring boot修改日志的默认配置
 
+```properties
+logging.level.cn.fenqing168=trace
+# 当前项目下生成springboot.log
+#logging.file=springboot.log
+
+# 指定完整路劲
+#logging.file=E://springboot.log
+
+# 指定路劲，在当前磁盘更目录下创建spring文件夹河里面的log文件夹，使用spring.log作为默认文件
+logging.path=/spring/log
+
+# 在控制台输出的日志格式
+logging.pattern.console=%d{yyyy-MM-dd} ==== [%thread] == %5level %logger{50} -- %msg%n
+# 指定文件输出的格式
+logging.pattern.file=%d{yyyy-MM-dd} ==== [%thread] == %5level %logger{50} -- %msg%n
+
+
+```
+
+### 2、指定配置
+
+* 给类路径下放上每个日志框架自己的配置文件即可，springboot就不使用自己的默认配置文件
+
+* | Logging System          | Customization                                                |
+  | ----------------------- | ------------------------------------------------------------ |
+  | Logback                 | `logback-spring.xml`, `logback-spring.groovy`, `logback.xml`, or `logback.groovy` |
+  | Log4j2                  | `log4j2-spring.xml` or `log4j2.xml`                          |
+  | JDK (Java Util Logging) | `logging.properties`                                         |
+
+logback.xml：直接被日志框架识别了
+
+logback-spring.xml：日志框架就不直接加载日志的配置项，由SpringBoot加载,可以使用SpringBoot的功能
+
+```xml
+<springProfile name="staging">
+    <!-- configuration to be enabled when the "staging" profile is active -->
+    某段配置只在某段环境下生效
+</springProfile>
+```
+
+slf4j+log4j
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <artifactId>logback-classic</artifactId>
+            <groupId>ch.qos.logback</groupId>
+        </exclusion>
+        <exclusion>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <groupId>org.slf4j</groupId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-log4j12</artifactId>
+</dependency>
+```
+
+切换到log4j2
+
+* 排除start-logging
+* 添加start-log4g2
