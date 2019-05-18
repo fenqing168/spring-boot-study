@@ -569,40 +569,42 @@ public @interface EnableAutoConfiguration {}
 > 
 > ```
 >
+> ```
+> 
 > public static void main(String[] args) {
 > SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
-> 
+>
 > }
 > ```
->
+> 
 > Spring Boot推荐给容器添加组件的方式；
->
+> 
 > 不来使用配置文件方式
->
-> ```xml
+> 
+> ​```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
->
+> 
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
->
+> 
 > </beans>
 > ```
-> 
+>
 > 1.配置类========Spring配置文件
-> 
+>
 > 2.使用@Bean给容器中添加组件
-> 
-> ​```java
+>
+> ```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
-> 
+>
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
@@ -612,8 +614,10 @@ public @interface EnableAutoConfiguration {}
 > System.out.println("给容器中添加组件");
 > return new HelloService();
 > }
-> 
+>
 > }
+>
+> ```
 > 
 > ```
 >
@@ -1268,3 +1272,22 @@ slf4j+log4j
 
 * 排除start-logging
 * 添加start-log4g2
+
+# 四、Web开发
+
+* 使用SpringBoot
+
+* * 创建SpringBoot应用，选中需要的模块；
+  * SpringBoot已经默认将这些场景配置好，只需要在配置文件中配置销量配置就可以运行起来
+  * 自己编写业务代码
+
+* 自动配置原理
+
+* * 这个场景SpringBoot帮我们配置了什么，能不能修改？能修改哪些配置，能不能扩展？
+
+  * ```java
+    xxxAutoConfiguration帮我们给容器中自动配置组件
+    xxxProperties:配置类，封装配置文件的内容；
+    ```
+
+* 
