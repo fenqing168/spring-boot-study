@@ -1533,26 +1533,82 @@ public class ThymeleafProperties {
       Boolean literals: true , false
       Null literal: null
       Literal tokens: one , sometext , main ,…
-  Text operations:
-  String concatenation: +
-  Literal substitutions: |The name is ${name}|
-  Arithmetic operations:
-  Binary operators: + , - , * , / , %
-  Minus sign (unary operator): -
-  Boolean operations:
-  Binary operators: and , or
-  Boolean negation (unary operator): ! , not
-  Comparisons and equality:
-  Comparators: > , < , >= , <= ( gt , lt , ge , le )
-  Equality operators: == , != ( eq , ne )
-  Conditional operators:
-  If-then: (if) ? (then)
-  If-then-else: (if) ? (then) : (else)
-  Default: (value) ?: (defaultvalue)
-  Special tokens:
-  Page 17 of 106No-Operation: _
+  Text operations:（文本）
+      String concatenation: +
+      Literal substitutions: |The name is ${name}|
+  Arithmetic operations:（数学运算）
+      Binary operators: + , - , * , / , %
+      Minus sign (unary operator): -
+  Boolean operations:（布尔运算）
+      Binary operators: and , or
+      Boolean negation (unary operator): ! , not
+  Comparisons and equality:（比较运算）
+      Comparators: > , < , >= , <= ( gt , lt , ge , le )
+      Equality operators: == , != ( eq , ne )
+  Conditional operators:（条件运算）
+      If-then: (if) ? (then)
+      If-then-else: (if) ? (then) : (else)
+      Default: (value) ?: (defaultvalue)
+  Special tokens:（特殊）
+      Page 17 of 106No-Operation: _
   ```
 
-* 
+#### 4、springmvc自动配置
+
+* [springmvc文档](<https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications>)
+
+* ```yml
+  29.1.1 Spring MVC Auto-configuration
+  Spring Boot 自动配置好了SpringMvc.
+  
+  以下是SpringBoot对Springmvc的默认配置:
+  
+  Inclusion of ContentNegotiatingViewResolver and BeanNameViewResolver beans.
+  	# 自动配置了ViewResolver(视图解析器：根据方法的返回值得到视图对象（View），视图对象决定如何渲染（转发，重定向）)
+  	# ContentNegotiatingViewResolver 组合所有的视图解析器
+  	# 如何定制：我们可以自己给容器中添加一个视图解析器。自动的将其组合起来
+  Support for serving static resources, including support for WebJars (covered later in this document)).静态资源路劲，webjars
+  
+  自动注册了 of Converter, GenericConverter, and Formatter beans.
+  
+  	# Converter 转换器， public String hello(User user):类型转换使用
+  	# Formatter 格式化器； 2017-12-17===Date
+          @Bean
+          @ConditionalOnProperty(prefix = "spring.mvc", name = "date-format")//在配置文件中配置日期格式化规则
+          public Formatter<Date> dateFormatter() {
+          return new DateFormatter(this.mvcProperties.getDateFormat());//日期格式化
+          }
+      # 自己添加格式化器 转换器，我们只需要放在容器中即可
+  
+  Support for HttpMessageConverters (covered later in this document).
+  	# HttpMessageConverters： SpringMvc用来转换Http请求和响应的；User-json
+  	# HttpMessageConverters的值是容器中决定的，获取所有的HttpMessageConverter；
+  	# 自己给容器天机HttpMessageConverter，只需要将自己的组件注册在容器中(@Bean,@Component)
+  Automatic registration of MessageCodesResolver (covered later in this document).定义错误代码生成规则
+  
+  
+  Static index.html support.静态资源首页访问
+  
+  Custom Favicon support (covered later in this document). 网页图标 favicon.ico
+  
+  Automatic use of a ConfigurableWebBindingInitializer bean (covered later in this document).
+  	# 我们可以配置一个ConfigurableWebBindingInitializer来替换默认的
+  	# 初始化WebDataBinder
+  	# 请求数据======javaBean
+  	
+  	org.springframework.boot.autoconfigure.web;Web的所有自动场景
+  
+  
+  If you want to keep Spring Boot MVC features and you want to add additional MVC configuration (interceptors, formatters, view controllers, and other features), you can add your own @Configuration class of type WebMvcConfigurer but without @EnableWebMvc. If you wish to provide custom instances of RequestMappingHandlerMapping, RequestMappingHandlerAdapter, or ExceptionHandlerExceptionResolver, you can declare a WebMvcRegistrationsAdapter instance to provide such components.
+  
+  If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
+  ```
+
+#### 5、如何修改SpringBoot的默认配置
+
+* 模式：
+* * SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置的（@Bean，@Component）如果有就用个用户配置的，如果没有，才自动配置；如果有些组件可以有多个（ViewResolver）将用户配置的自己默认的组合起来
+
+
 
  
