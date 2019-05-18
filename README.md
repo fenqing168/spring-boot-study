@@ -1403,3 +1403,27 @@ slf4j+log4j
 * localhost:8080/ 找index.html
 
 * 所有的 **/favicon.ico 都映射到都是在静态资源文件夹下找
+
+### 3、模板引擎
+
+* JSP, Velocity, Freemarker, Thymeleaf
+* ![](rd-image/20190518221425.png)
+* SpringBoot 推荐的Thymeleaf；
+* 语法更简单，功能更强大
+
+
+
+#### 1、引入Thymeleaf；
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+切换 thymeleaf版本
+<thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
+<!-- 布局功能的支持程序 thymeleaf主程序 layout2以上版本 -->
+<!-- thymeleaf2 和  layout1-->
+<thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
+```
+
