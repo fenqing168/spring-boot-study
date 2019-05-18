@@ -1290,4 +1290,116 @@ slf4j+log4j
     xxxProperties:配置类，封装配置文件的内容；
     ```
 
+## 2、springBoot静态文件映射规则
+
+* ```java
+  @ConfigurationProperties(prefix = "spring.resources", ignoreUnknownFields = false)
+  public class ResourceProperties implements ResourceLoaderAware, InitializingBean {
+      //可以设置静态资源有关的参数
+  ```
+
 * 
+
+* ```
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+  if (!this.resourceProperties.isAddMappings()) {
+  logger.debug("Default resource handling disabled");
+  return;
+  }
+  Integer cachePeriod = this.resourceProperties.getCachePeriod();
+  if (!registry.hasMappingForPattern("/webjars/**")) {
+  customizeResourceHandlerRegistration(registry
+  .addResourceHandler("/webjars/**")
+  .addResourceLocations("classpath:/META-INF/resources/webjars/")
+  .setCachePeriod(cachePeriod));
+  }
+  String staticPathPattern = this.mvcProperties.getStaticPathPattern();
+  if (!registry.hasMappingForPattern(staticPathPattern)) {
+  customizeResourceHandlerRegistration(
+  registry.addResourceHandler(staticPathPattern)
+  .addResourceLocations(
+  this.resourceProperties.getStaticLocations())
+  .setCachePeriod(cachePeriod));
+  }
+  }
+  
+  //配置欢迎页面设置
+  @Bean
+  public WelcomePageHandlerMapping welcomePageHandlerMapping(
+  ResourceProperties resourceProperties) {
+  return new WelcomePageHandlerMapping(resourceProperties.getWelcomePage(),
+  this.mvcProperties.getStaticPathPattern());
+  }
+  
+  //喜欢的图标
+  @Configuration
+  @ConditionalOnProperty(value = "spring.mvc.favicon.enabled",
+  matchIfMissing = true)
+  public static class FaviconConfiguration {
+  
+  private final ResourceProperties resourceProperties;
+  
+  public FaviconConfiguration(ResourceProperties resourceProperties) {
+  this.resourceProperties = resourceProperties;
+  }
+  
+  @Bean
+  public SimpleUrlHandlerMapping faviconHandlerMapping() {
+  SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+  mapping.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
+  //把所有的 **/favicon.ico 都映射到
+  mapping.setUrlMap(Collections.singletonMap("**/favicon.ico",
+  faviconRequestHandler()));
+  return mapping;
+  }
+  
+  @Bean
+  public ResourceHttpRequestHandler faviconRequestHandler() {
+  ResourceHttpRequestHandler requestHandler = new ResourceHttpRequestHandler();
+  requestHandler
+  .setLocations(this.resourceProperties.getFaviconLocations());
+  return requestHandler;
+  }
+  
+  }
+  ```
+
+* 所有/webjars/**，都去classpath:/META-INF/resoutces/webjars 找资源
+
+* * webjars:以jar包的方式引入静态资源 [资料](<https://www.webjars.org/>
+
+  * ![](rd-image/20190518204618.png)
+
+  * localhost:8080/webjars/jquery/3.3.1/jquery.js
+
+  * ```xml
+    <!--        webjars-->映入js引入资源就可以了
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery</artifactId>
+                <version>3.4.1</version>
+            </dependency>
+    ```
+
+  * 
+
+* * ```
+    "/**" 当前项目的任何资源
+    ```
+
+  * ```java
+    "classpath:/META-INF/resources/", 
+    "classpath:/resources/",
+    "classpath:/static/", 
+    "classpath:/public/"
+    "/" 当先项目根目录    
+    ```
+
+  * localhost:8080/abc === 去静态资源文件夹找abc
+
+* 欢迎页；静态资源文件夹下的所有index.html页面；被"/**"映射
+
+* localhost:8080/ 找index.html
+
+* 所有的 **/favicon.ico 都映射到都是在静态资源文件夹下找
