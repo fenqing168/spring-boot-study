@@ -1,4 +1,7 @@
+
+
 # @EnableAutoConfiguration一、Spring Boot 入门
+
 ## 1、Spring Boot简介
 > * 简化Spring应用开发的一个框架;<br>
 > * 整个Spring技术栈的一大整合; <br/>
@@ -1427,3 +1430,129 @@ slf4j+log4j
 <thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
 ```
 
+#### 2、Thymeleaf使用&语法
+
+```java
+@ConfigurationProperties(prefix = "spring.thymeleaf")
+public class ThymeleafProperties {
+
+	private static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+
+	public static final String DEFAULT_PREFIX = "classpath:/templates/";
+
+	public static final String DEFAULT_SUFFIX = ".html";
+    //
+```
+
+* 只要我们把html页面放在templates里边，thymeleaf就能帮我们自动渲染了
+
+* 使用
+
+* * 导入thymeleaf命名空间
+
+  * ```html
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    ```
+
+  * 使用thymeleaf语法
+
+  * ```html
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>成功</title>
+    </head>
+    <body>
+        <h1>成功</h1>
+        <!--th:text,将div里面的文本内容设置为-->
+        <div th:text="${hello}">这是现实欢迎信息</div>
+    </body>
+    </html>
+    ```
+
+#### 3、语法规则
+
+* th:text 改变当前元素里面的文本内容；
+
+* th:任意html属性，来替换原生属性的值
+
+* ![20190518231621](rd-image\20190518231621.png)
+
+* 表达式
+
+* ```properties
+  Simple expressions:(表达式语法)
+      Variable Expressions: ${...}：获取变量值；OGNL
+      	1）、获取对象的属性，调用方法
+      	2）、内置对象
+      	#ctx : the context object.
+          #vars: the context variables.
+          #locale : the context locale.
+          #request : (only in Web Contexts) the HttpServletRequest object.
+          #response : (only in Web Contexts) the HttpServletResponse object.
+          #session : (only in Web Contexts) the HttpSession object.
+          #servletContext : (only in Web Contexts) the ServletContext object.
+          
+          ${session.foo}
+          
+          3）、内置工具对象：
+          #execInfo : information about the template being processed.
+          #messages : methods for obtaining externalized messages inside variables expressions, in the same way as they
+          would be obtained using #{…} syntax.
+          #uris : methods for escaping parts of URLs/URIs
+          Page 20 of 106#conversions : methods for executing the configured conversion service (if any).
+          #dates : methods for java.util.Date objects: formatting, component extraction, etc.
+          #calendars : analogous to #dates , but for java.util.Calendar objects.
+          #numbers : methods for formatting numeric objects.
+          #strings : methods for String objects: contains, startsWith, prepending/appending, etc.
+          #objects : methods for objects in general.
+          #bools : methods for boolean evaluation.
+          #arrays : methods for arrays.
+          #lists : methods for lists.
+          #sets : methods for sets.
+          #maps : methods for maps.
+          #aggregates : methods for creating aggregates on arrays or collections.
+          #ids : methods for dealing with id attributes that might be repeated (for example, as a result of an iteration)
+          
+      Selection Variable Expressions: *{...}：变量选择表达式：和${}功能是一样的；
+      	补充：配合 th:object="${session.user}"
+      	<div th:object="${session.user}">
+              <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
+              <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
+              <p>Nationality: <span th:text="*{nationality}">Saturn</span>.</p>
+          </div>
+      Message Expressions: #{...}：获取国际化内容
+      Link URL Expressions: @{...}：定义URL；
+      	@{/order/{orderId}/details(orderId=${o.id})}
+      Fragment Expressions: ~{...}：片段引用表达式
+      	<div th:insert="~{commons :: main}">...</div>
+  Literals（字面量）
+      Text literals: 'one text' , 'Another one!' ,… 
+      Number literals: 0 , 34 , 3.0 , 12.3 ,…
+      Boolean literals: true , false
+      Null literal: null
+      Literal tokens: one , sometext , main ,…
+  Text operations:
+  String concatenation: +
+  Literal substitutions: |The name is ${name}|
+  Arithmetic operations:
+  Binary operators: + , - , * , / , %
+  Minus sign (unary operator): -
+  Boolean operations:
+  Binary operators: and , or
+  Boolean negation (unary operator): ! , not
+  Comparisons and equality:
+  Comparators: > , < , >= , <= ( gt , lt , ge , le )
+  Equality operators: == , != ( eq , ne )
+  Conditional operators:
+  If-then: (if) ? (then)
+  If-then-else: (if) ? (then) : (else)
+  Default: (value) ?: (defaultvalue)
+  Special tokens:
+  Page 17 of 106No-Operation: _
+  ```
+
+* 
+
+ 
