@@ -1743,6 +1743,108 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 * 默认访问首页
 
+* ```java
+  /**
+       * 添加webMvcConfigurer组件
+       * @return
+       *  @Bean 将组件放入到容器中
+       */
+  @Bean
+  public WebMvcConfigurer webMvcConfigurer(){
+  
+      WebMvcConfigurer webMvcConfigurer = new WebMvcConfigurer(){
+  
+          @Override
+          public void addViewControllers(ViewControllerRegistry registry) {
+              registry.addViewController("/").setViewName("login");
+              registry.addViewController("/index.html").setViewName("login");
+          }
+  
+      };
+  
+      return webMvcConfigurer;
+  
+  }
+  ```
 
+* 国际化
+
+* * 编写国际化配置文件；
+  * 使用ResourseBundleMessageSourse管理国际化资源文件
+  * 在页面使用fmt:message取出国际化内容
+
+* 步骤
+
+* * 编写国际化配置文件，抽取页面需要显示的国际化消息
+
+  * ![](rd-image/20190520011247.png)
+
+  * springBoot 自欧东配置好了管理国际化资源文件的组件；
+
+  * ```java
+    @Bean
+    @ConfigurationProperties(prefix = "spring.messages")
+    public MessageSourceProperties messageSourceProperties() {
+        return new MessageSourceProperties();
+    }
+    
+    public class MessageSourceProperties {
+    
+        /**
+    	 * Comma-separated list of basenames (essentially a fully-qualified classpath
+    	 * location), each following the ResourceBundle convention with relaxed support for
+    	 * slash based locations. If it doesn't contain a package qualifier (such as
+    	 * "org.mypackage"), it will be resolved from the classpath root.
+    	 */
+        private String basename = "messages";//我们的配置文件可以直接放在类路径下叫messages.properties
+      
+        @Bean
+        public MessageSource messageSource(MessageSourceProperties properties) {
+            ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+            if (StringUtils.hasText(properties.getBasename())) {
+               
+     //设置国际化资源文件的基础名  （去掉语言国家代码）       messageSource.setBasenames(StringUtils.commaDelimitedListToStringArray(
+                    StringUtils.trimAllWhitespace(properties.getBasename())));
+            }
+            if (properties.getEncoding() != null) {
+                messageSource.setDefaultEncoding(properties.getEncoding().name());
+            }
+            messageSource.setFallbackToSystemLocale(properties.isFallbackToSystemLocale());
+            Duration cacheDuration = properties.getCacheDuration();
+            if (cacheDuration != null) {
+                messageSource.setCacheMillis(cacheDuration.toMillis());
+            }
+            messageSource.setAlwaysUseMessageFormat(properties.isAlwaysUseMessageFormat());
+            messageSource.setUseCodeAsDefaultMessage(properties.isUseCodeAsDefaultMessage());
+            return messageSource;
+        }
+    
+    ```
+
+  * 去页面获取国际化的值
+
+  * 效果：根据浏览器显示语言消息
+
+  * 原理：
+
+  * * 国际化Locale(区域信息对象)；LocaleResolver(获取区域对象信息)
+
+    * ```java
+      @Bean
+      @ConditionalOnMissingBean
+      @ConditionalOnProperty(prefix = "spring.mvc", name = "locale")
+      public LocaleResolver localeResolver() {
+          if (this.mvcProperties
+              .getLocaleResolver() == WebMvcProperties.LocaleResolver.FIXED) {
+              return new FixedLocaleResolver(this.mvcProperties.getLocale());
+          }
+          AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+          localeResolver.setDefaultLocale(this.mvcProperties.getLocale());
+          return localeResolver;
+      }
+      默认的就是根据请求头带来的区域信息获取Locale进行国际化
+      ```
+
+    * 
 
  
