@@ -24,4 +24,9 @@ public class HelloWorldController {
         return "success";
     }
 
+//    @GetMapping({"/", "/index.html"})
+//    public String index(){
+//        return "index";
+//    }
+
 }

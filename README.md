@@ -574,40 +574,42 @@ public @interface EnableAutoConfiguration {}
 >
 > ```
 > 
+> ```
+>
 > public static void main(String[] args) {
 > SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
->
+> 
 > }
 > ```
-> 
+>
 > Spring Boot推荐给容器添加组件的方式；
-> 
+>
 > 不来使用配置文件方式
-> 
-> ​```xml
+>
+> ```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-> 
+>
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
-> 
+>
 > </beans>
 > ```
->
+> 
 > 1.配置类========Spring配置文件
->
+> 
 > 2.使用@Bean给容器中添加组件
->
-> ```java
+> 
+> ​```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
->
+> 
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
@@ -617,8 +619,10 @@ public @interface EnableAutoConfiguration {}
 > System.out.println("给容器中添加组件");
 > return new HelloService();
 > }
->
+> 
 > }
+> 
+> ```
 >
 > ```
 > 
@@ -1734,6 +1738,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
 * 模式：
 * * SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置的（@Bean，@Component）如果有就用个用户配置的，如果没有，才自动配置；如果有些组件可以有多个（ViewResolver）将用户配置的自己默认的组合起来
   * 在SpringBoot中会有很多的xxxConfigurer帮助我们进行扩展配置
+
+#### 6、RestfulCRUD
+
+* 默认访问首页
 
 
 
