@@ -576,40 +576,42 @@ public @interface EnableAutoConfiguration {}
 > 
 > ```
 >
+> ```
+> 
 > public static void main(String[] args) {
 > SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
-> 
+>
 > }
 > ```
->
+> 
 > Spring Boot推荐给容器添加组件的方式；
->
+> 
 > 不来使用配置文件方式
->
-> ```xml
+> 
+> ​```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
->
+> 
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
->
+> 
 > </beans>
 > ```
-> 
+>
 > 1.配置类========Spring配置文件
-> 
+>
 > 2.使用@Bean给容器中添加组件
-> 
-> ​```java
+>
+> ```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
-> 
+>
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
@@ -619,8 +621,10 @@ public @interface EnableAutoConfiguration {}
 > System.out.println("给容器中添加组件");
 > return new HelloService();
 > }
-> 
+>
 > }
+>
+> ```
 > 
 > ```
 >
@@ -1845,6 +1849,55 @@ public class MyMvcConfig implements WebMvcConfigurer {
       默认的就是根据请求头带来的区域信息获取Locale进行国际化
       ```
 
-    * 
+  * 点击链接切换国际化
+
+  * ```java
+    /**
+     * 可以在链接上带上区域信息
+     * @author fenqing
+     */
+    public class MyLocaleResolver implements LocaleResolver {
+    
+    
+        @Override
+        public Locale resolveLocale(HttpServletRequest request) {
+            String l = request.getParameter("l");
+            Locale locale = Locale.getDefault();
+            if(!StringUtils.isEmpty(l)){
+                String[] split = l.split("_");
+                locale = new Locale(split[0], split[1]);
+            }
+            return locale;
+        }
+    
+        @Override
+        public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+    
+        }
+    }
+    ```
+
+
+###  3、登陆
+
+* 模板引擎页面修改以后，要实时生效
+
+* * 禁用模板引擎的缓存
+
+  * ```properties
+    # 禁用模板引擎缓存
+    spring.thymeleaf.cache=false
+    ```
+
+  * 页面修改完成以后ctrl+F9, 重新编译
+
+* 登陆错误消息的显示
+
+* ```html
+  <p style="color: red;" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+  
+  ```
+
+* 拦截器进行登陆检查
 
  

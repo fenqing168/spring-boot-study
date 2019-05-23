@@ -17,13 +17,15 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin">
+    <form class="form-signin" th:action="@{/user/login}" method="post">
       <img class="mb-4" th:src="@{/assets/img/bootstrap-solid.svg}" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>
+      <!--判断-->
+      <p style="color: red;" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
       <label for="inputEmail" class="sr-only" th:text="#{login.username}">Username</label>
-      <input type="email" id="inputEmail" class="form-control" th:placeholder="#{login.username}" placeholder="Email address" required autofocus>
+      <input type="text" name="username" id="inputEmail" class="form-control" th:placeholder="#{login.username}" placeholder="Email address" required autofocus>
       <label for="inputPassword" class="sr-only" th:text="#{login.remember}">Password</label>
-      <input type="password" id="inputPassword" class="form-control" th:placeholder="#{login.password}" placeholder="Password" required>
+      <input type="password" name="password" id="inputPassword" class="form-control" th:placeholder="#{login.password}" placeholder="Password" required>
       <div class="checkbox mb-3">
         <label>
           <input type="checkbox" value="remember-me"> [[#{login.remember}]]
