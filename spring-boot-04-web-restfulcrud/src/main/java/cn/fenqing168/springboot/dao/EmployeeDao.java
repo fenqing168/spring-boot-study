@@ -16,19 +16,18 @@ public class EmployeeDao {
     private DepartmentDao departmentDao;
 
     static{
-
         empLoyees = new HashMap<>();
 
         empLoyees.put(1001,
-                new EmpLoyee(1001, "E-AA", "aa@163.com", 1, new Department(101, "D-AA"), new Date()));
+                new EmpLoyee(1001, "E-AA", "aa@163.com", 1, DepartmentDao.getDepartmentStatic(101), new Date()));
         empLoyees.put(1002,
-                new EmpLoyee(1001, "E-BB", "bb@163.com", 1, new Department(102, "D-BB"), new Date()));
+                new EmpLoyee(1001, "E-BB", "bb@163.com", 1, DepartmentDao.getDepartmentStatic(102), new Date()));
         empLoyees.put(1003,
-                new EmpLoyee(1001, "E-CC", "cc@163.com", 0, new Department(103, "D-CVC"), new Date()));
+                new EmpLoyee(1001, "E-CC", "cc@163.com", 0, DepartmentDao.getDepartmentStatic(103), new Date()));
         empLoyees.put(1004,
-                new EmpLoyee(1001, "E-DD", "dd@163.com", 0, new Department(104, "D-EE"), new Date()));
+                new EmpLoyee(1001, "E-DD", "dd@163.com", 0, DepartmentDao.getDepartmentStatic(104), new Date()));
         empLoyees.put(1005,
-                new EmpLoyee(1001, "E-EE", "ee@163.com", 1, new Department(105, "D-EE"), new Date()));
+                new EmpLoyee(1001, "E-EE", "ee@163.com", 1, DepartmentDao.getDepartmentStatic(105), new Date()));
     }
 
     private static Integer initId = 1006;
