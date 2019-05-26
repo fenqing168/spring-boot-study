@@ -49,6 +49,6 @@ public class EmployeeDao {
     }
 
     public Collection<EmpLoyee> getAll() {
-        return new ArrayList<>();
+        return empLoyees.values();
     }
 }
