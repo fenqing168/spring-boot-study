@@ -21,13 +21,13 @@ public class EmployeeDao {
         empLoyees.put(1001,
                 new EmpLoyee(1001, "E-AA", "aa@163.com", 1, DepartmentDao.getDepartmentStatic(101), new Date()));
         empLoyees.put(1002,
-                new EmpLoyee(1001, "E-BB", "bb@163.com", 1, DepartmentDao.getDepartmentStatic(102), new Date()));
+                new EmpLoyee(1002, "E-BB", "bb@163.com", 1, DepartmentDao.getDepartmentStatic(102), new Date()));
         empLoyees.put(1003,
-                new EmpLoyee(1001, "E-CC", "cc@163.com", 0, DepartmentDao.getDepartmentStatic(103), new Date()));
+                new EmpLoyee(1003, "E-CC", "cc@163.com", 0, DepartmentDao.getDepartmentStatic(103), new Date()));
         empLoyees.put(1004,
-                new EmpLoyee(1001, "E-DD", "dd@163.com", 0, DepartmentDao.getDepartmentStatic(104), new Date()));
+                new EmpLoyee(1004, "E-DD", "dd@163.com", 0, DepartmentDao.getDepartmentStatic(104), new Date()));
         empLoyees.put(1005,
-                new EmpLoyee(1001, "E-EE", "ee@163.com", 1, DepartmentDao.getDepartmentStatic(105), new Date()));
+                new EmpLoyee(1005, "E-EE", "ee@163.com", 1, DepartmentDao.getDepartmentStatic(105), new Date()));
     }
 
     private static Integer initId = 1006;
@@ -49,5 +49,9 @@ public class EmployeeDao {
 
     public Collection<EmpLoyee> getAll() {
         return empLoyees.values();
+    }
+
+    public EmpLoyee get(Integer id) {
+        return empLoyees.get(id);
     }
 }
