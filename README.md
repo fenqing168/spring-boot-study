@@ -578,40 +578,42 @@ public @interface EnableAutoConfiguration {}
 >
 > ```
 > 
+> ```
+>
 > public static void main(String[] args) {
 > SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
->
+> 
 > }
 > ```
-> 
+>
 > Spring Boot推荐给容器添加组件的方式；
-> 
+>
 > 不来使用配置文件方式
-> 
-> ​```xml
+>
+> ```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-> 
+>
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
-> 
+>
 > </beans>
 > ```
->
+> 
 > 1.配置类========Spring配置文件
->
+> 
 > 2.使用@Bean给容器中添加组件
->
-> ```java
+> 
+> ​```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
->
+> 
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
@@ -621,8 +623,10 @@ public @interface EnableAutoConfiguration {}
 > System.out.println("给容器中添加组件");
 > return new HelloService();
 > }
->
+> 
 > }
+> 
+> ```
 >
 > ```
 > 
@@ -1895,9 +1899,47 @@ public class MyMvcConfig implements WebMvcConfigurer {
 
 * ```html
   <p style="color: red;" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
-  
   ```
 
-* 拦截器进行登陆检查
+### 4、拦截器登陆检查
 
- 
+```
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    Object user = request.getSession().getAttribute("loginUser");
+    if(user != null){
+        //登陆
+
+        return true;
+    }else{
+        //未登录
+        request.setAttribute("msg", "没有权限清先登陆");
+        request.getRequestDispatcher("/index.html").forward(request, response);
+        return false;
+    }
+}
+
+@Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                //静态资源 *.css, *.js
+                //SpringBoot已经做好了静态资源映射
+                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/index.html", "/user/login", "/");
+            }
+```
+
+### 5、CRUD-员工列表
+
+* 实验要求：
+
+* * RestFulCRUD，CEUD 满足Rest风格；
+
+  * URL : /组员名称/资源标识 HTTP请求方式区分资源CRUD操作
+
+  * |      | 不同CRUD(uri区分操作)   | RestFulCRUD     |
+    | ---- | ----------------------- | --------------- |
+    | 查询 | getEmp                  | emp-GET         |
+    | 添加 | addEmp?xxx              | emp-POST        |
+    | 修改 | updateEmp?id=xxx&xxx=xx | emp/{id} -PUT   |
+    | 删除 | deleteEmp?id=1          | emp/{id}-DELETE |
+
+    
