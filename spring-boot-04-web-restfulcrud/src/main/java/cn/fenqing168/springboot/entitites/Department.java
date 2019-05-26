@@ -26,4 +26,7 @@ public class Department {
         this.id = id;
         this.departmentName = departmentName;
     }
+
+    public Department() {
+    }
 }

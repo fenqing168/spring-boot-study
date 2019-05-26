@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collection;
 
@@ -49,6 +50,22 @@ public class EmpController {
         Collection<Department> departments = departmentDao.getDepartments();
         model.addAttribute("depts", departments);
         return "emp/add";
+    }
+
+    /**
+     * 员工添加
+     * @param empLoyeep SpringMvc 自动将请求参数和入参对象的属性进行一一绑定；
+     *                  请求参数的名字和javaBean入参的对象里面属性名一一对应
+     * @return
+     */
+    @PostMapping("/emp")
+    public String addEmp(EmpLoyee empLoyeep){
+        System.out.println(empLoyeep);
+        employeeDao.save(empLoyeep);
+        //来到员工列表
+        // redirect: 表示重定向一个地址 /代表当前项目下资源目录
+        // forward: 表示转发到一个页面
+        return "redirect:/emps";
     }
 
 }

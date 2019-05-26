@@ -2012,4 +2012,12 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
     </body>
     ```
 
-  * 引入片段的时候传入参数
+  * 引入片段的时候传入参数:
+
+  * 提交的数据格式不对，生日；日期；
+
+  * 2017-12-12; 2017/12/12 2017.12.12
+
+  * 日期的格式化。，SpringMvc将页面提交的值需要转换为指定的类型；
+
+  * 默认日期是按照/的格式

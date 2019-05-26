@@ -72,4 +72,16 @@ public class EmpLoyee {
         this.department = department;
         this.birth = birth;
     }
+
+    @Override
+    public String toString() {
+        return "EmpLoyee{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", department=" + department +
+                ", birth=" + birth +
+                '}';
+    }
 }
