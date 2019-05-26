@@ -1,5 +1,3 @@
-
-
 # @EnableAutoConfiguration一、Spring Boot 入门
 
 ## 1、Spring Boot简介
@@ -1942,4 +1940,76 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
     | 修改 | updateEmp?id=xxx&xxx=xx | emp/{id} -PUT   |
     | 删除 | deleteEmp?id=1          | emp/{id}-DELETE |
 
+  * 实验的请求架构
+
+  
+
+  * |                                  | 请求URI  | 请求方式 |
+    | -------------------------------- | -------- | -------- |
+    | 查询所有员工                     | emps     | GET      |
+    | 查询某个员工                     | emp/{id} | GET      |
+    | 添加页面                         | emp      | GET      |
+    | 添加员工                         | emp      | POST     |
+    | 来到修改页面（查出员工信息回显） | emp/{id} | GET      |
+    | 修改员工                         | emp      | PUT      |
+    | 删除员工                         | emp/1    | DELETE   |
+
+  * 员工列表
+
+  * thymeleaf公共页面元素抽取
+
+  * ```html
+    <!--1.抽取公共片段-->
+    <div th:fragment="copy">
+    &copy; 2011 The Good Thymes Virtual Grocery
+    </div>
+    <!--2.映入公共片段-->
+    <div th:insert="~{footer :: copy}"></div>
+    ~{templatename::selector} 模板名::选择器
+    ~{templatename::fragmentname} ~模板名::片段名
     
+    <!--
+    默认效果:
+    insert的功能片段在div标签中
+    如果使用th:insert 等属性进行引入，可以不用写~{}
+    [[~{}]];[(~{})]，行内写法要加上~{}
+    -->
+    ```
+
+  * 三种引入功能片段的th属性
+
+  * th:insert     将公共片段整个插入到声明insert属性的指定元素中
+
+  * th:replace  将公共片段整个替换声明replace属性的元素
+
+  * th:include  将公共片段的内容包含到标签中
+
+  * ```html
+    <footer th:fragment="copy">
+    &copy; 2011 The Good Thymes Virtual Grocery
+    </footer>
+    引入方式
+    <body>
+    ...
+    <div th:insert="footer :: copy"></div>
+    <div th:replace="footer :: copy"></div>
+    <div th:include="footer :: copy"></div>
+    </body>
+    效果
+    <body>
+    ...
+    <div>
+    <footer>
+    &copy; 2011 The Good Thymes Virtual Grocery
+    </footer>
+    </div>
+    <footer>
+    &copy; 2011 The Good Thymes Virtual Grocery
+    </footer>
+    <div>
+    &copy; 2011 The Good Thymes Virtual Grocery
+    </div>
+    </body>
+    ```
+
+  * 

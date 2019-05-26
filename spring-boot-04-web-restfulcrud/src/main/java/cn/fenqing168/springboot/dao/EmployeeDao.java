@@ -5,9 +5,7 @@ import cn.fenqing168.springboot.entitites.EmpLoyee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class EmployeeDao {
@@ -50,4 +48,7 @@ public class EmployeeDao {
 
     }
 
+    public Collection<EmpLoyee> getAll() {
+        return new ArrayList<>();
+    }
 }
