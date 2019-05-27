@@ -578,40 +578,42 @@ public @interface EnableAutoConfiguration {}
 > 
 > ```
 >
+> ```
+> 
 > public static void main(String[] args) {
 > SpringApplication.run(SpringBoot02ConfigApplication.class, args);
 > }
 > ```
-> 
+>
 > }
 > ```
->
+> 
 > Spring Boot推荐给容器添加组件的方式；
->
+> 
 > 不来使用配置文件方式
->
-> ```xml
+> 
+> ​```xml
 > <?xml version="1.0" encoding="UTF-8"?>
 > <beans xmlns="http://www.springframework.org/schema/beans"
 > xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 > xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
->
+> 
 > <bean id="helloService" class="cn.fenqing168.springBoot.service.HelloService" />
->
+> 
 > </beans>
 > ```
-> 
+>
 > 1.配置类========Spring配置文件
-> 
+>
 > 2.使用@Bean给容器中添加组件
-> 
-> ​```java
+>
+> ```java
 > /**
 >    * @Configuration：当前类是一个配置类；就是来代替之前的Spring配置文件
 > */
 > @Configuration
 > public class MyAppConfig {
-> 
+>
 > /**
 >        * 将方法的返回值添加到容器中；容器中这个组件默认的id就是方法名
 >        * @return
@@ -621,8 +623,10 @@ public @interface EnableAutoConfiguration {}
 > System.out.println("给容器中添加组件");
 > return new HelloService();
 > }
-> 
+>
 > }
+>
+> ```
 > 
 > ```
 >
@@ -2021,3 +2025,78 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
   * 日期的格式化。，SpringMvc将页面提交的值需要转换为指定的类型；
 
   * 默认日期是按照/的格式
+
+### 7、错误处理机制
+
+* SpringBoot 默认的错误处理机制
+
+* 返回一个默认的错误页面
+
+* ![](./rd-image/20190528000359.png)
+
+* 如果是其他客户端，默认相应一个json数据
+
+* 原理：
+
+* * 可以参照：ErrorMvcAutoConfiguration页面
+
+  * 给容器中添加了如下组件
+
+  * * ```java
+      DefaultErrorAttributes
+      封装错误信息
+      BasicErrorController 处理默认的/error请求
+      @RequestMapping("${server.error.path:${error.path:/error}}")
+      public class BasicErrorController extends AbstractErrorController
+      @RequestMapping(produces = MediaType.TEXT_HTML_VALUE) //产生html
+      	public ModelAndView errorHtml(HttpServletRequest request,
+      			HttpServletResponse response) {
+      		HttpStatus status = getStatus(request);
+      		Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
+      				request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+      		response.setStatus(status.value());
+      		ModelAndView modelAndView = resolveErrorView(request, response, status, model);
+      		return (modelAndView != null) ? modelAndView : new ModelAndView("error", model);
+      	}
+      
+      	@RequestMapping//产生Json
+      	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
+      		Map<String, Object> body = getErrorAttributes(request,
+      				isIncludeStackTrace(request, MediaType.ALL));
+      		HttpStatus status = getStatus(request);
+      		return new ResponseEntity<>(body, status);
+      	}
+      ErrorPageCustomizer
+      @Value("${error.path:/error}")
+      private String path = "/error";
+      系统出现错误之后，进行请求，web.xml注册的错误页面，
+      
+      
+      ```
+
+      
+
+      
+
+      
+
+
+      
+      
+
+      步骤
+
+      一旦系统出现4xx或者5xx之类的错误；ErrorPageCustomizer就会生效；定制错误响应规则
+
+      就会被BasicErrorController接受
+      DefaultErrorViewResolver 如果是html请求（浏览器）
+
+      
+
+  * 如何定制错误页面
+
+  * 定制错误页面：有模板引擎情况，可以直接在error/状态码.html,如果没有，直接在static下error文件夹
+
+  * 可以使用状态码第一个数字为文件名，进行模糊匹配 例如(4xx.html)
+
+  * 如果是其他客户端，如何定制json数据

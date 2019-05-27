@@ -45,4 +45,8 @@ public class DepartmentDao {
     public Collection<Department> getDepartments() {
         return departmentMap.values();
     }
+
+    public void delete(Integer id) {
+        departmentMap.remove(id);
+    }
 }

@@ -54,13 +54,16 @@
                   <td th:text="${#dates.format(emp.birth, 'yyyy-MM-dd HH:mm')}">1,001</td>
                   <td>
                     <a th:href="@{/emp/} + ${emp.id}" class="btn btn-sm btn-primary">编辑</a>
-                    <button class="btn btn-sm btn-danger">删除</button>
+                    <button th:attr="del_url=@{/emp/}+${emp.id}" class="btn btn-sm btn-danger delete">删除</button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </main>
+        <form id="deleteForm" method="post">
+          <input type="hidden" name="_method" value="delete"/>
+        </form>
       </div>
     </div>
 
@@ -81,6 +84,9 @@
     <!-- Graphs -->
     <script th:src="@{/webjars/Chart.js/2.5.0/dist/Chart.min.js}" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script>
+      $('.delete').click(function () {
+        $('#deleteForm').attr('action', $(this).attr('del_url')).submit();
+      });
       var ctx = document.getElementById("myChart");
       var myChart = new Chart(ctx, {
         type: 'line',

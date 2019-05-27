@@ -54,4 +54,8 @@ public class EmployeeDao {
     public EmpLoyee get(Integer id) {
         return empLoyees.get(id);
     }
+
+    public void delete(Integer id) {
+        empLoyees.remove(id);
+    }
 }
